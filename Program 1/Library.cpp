@@ -1,13 +1,13 @@
 #include <iostream>
-#include "Library1.h"
+#include "LibFuncs.h"
 #include <vector>
 #include <thread>
 #include <chrono>
 
 int main() {
+
 	std::vector<BookDetails> libraryRecords;
 	libraryRecords.reserve(100); // reserve for 100 books
-
 	std::vector<std::string> titles = {"Gatsby", "Mockingbird", "1984"};
 	std::vector<std::string> authors = {"Fitzgerald", "Lee", "Orwell"};
 	std::vector<int> years = {1925, 1960, 1949};
@@ -31,19 +31,28 @@ int main() {
 		int choice;
 		std::cin >> choice;
 		if (choice == 0) {
-			break;
+			break; 
 		}
-
+		
 		else if (choice < 1 || choice > titles.size()) {
 			std::cout << "Invalid choice. Please try again." << std::endl;
 			continue;
 		}
 
 		else if (choice >= 1 && choice <= titles.size()) {
+
+			std::cin.ignore(1000, '\n'); //ignore newline from bad formatting in the input 
+
 			std::string borrowerName;
 			std::cout << "Enter borrower's name: ";
 			std::getline(std::cin, borrowerName);
-			lendBook(titles[choice - 1], borrowerName);
+
+			// ass libraryRecords vector as the first arg
+			lendBook(libraryRecords, titles[choice - 1], borrowerName); //gg
+		}
+
+		else {
+			std::cout << "Invalid choice. Please try again." << std::endl;
 		}
 	}
 }

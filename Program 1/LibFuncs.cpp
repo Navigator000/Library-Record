@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Library1.h"
+#include "LibFuncs.h"
 #include <thread>
 #include <chrono>
 
@@ -24,24 +24,35 @@ void showSpinner(int duration) {
 	std::cout << "\r " << std::flush; //spinner ends with a space to clear the last spinner character
 }
 
-void lendBook(std::string bookTitle, std::string borrowerName) {
+int getAvailableCopies(const std::vector<BookDetails>& libraryRecords, std::string bookTitle) {
+	for (const auto& book : libraryRecords) {
+		if (book.Book == bookTitle) {
+			return book.Count;
+		}
+	}
+	return 0;
+}
+
+void lendBook(std::vector<BookDetails>& libraryRecords, std::string bookTitle, std::string borrowerName) {
 	std::cout << "Lending book: " << bookTitle << " to " << borrowerName << std::endl;
+
+	// use vec check capac
+	int BookCapacity = getAvailableCopies(libraryRecords, bookTitle);
+	if (BookCapacity <= 0) {
+		std::cout << "No copies available" << std::endl;
+		return;
+	}
+
 	showSpinner(2);
-	int BookCapacity = getAvailableCopies(bookTitle);
-	BookCapacity -= 1;
-	std::cout << "Book Lent" << std::endl; 
-	return;
-}
 
-void returnBook(std::string bookTitle, std::string borrowerName, std::string returnDate) {
-	std::cout << "Returning book: " << bookTitle << " from " << borrowerName << " on " << returnDate << std::endl;
-	//todo: update lib recs here
-	return;
-}
-
-int getAvailableCopies(std::string bookTitle) {
-	int count{};
-	return 5;
+	// find the book in the vector and decrement
+	for (auto& book : libraryRecords) {
+		if (book.Book == bookTitle) {
+			book.Count -= 1;
+			break;
+		}
+	}
+	std::cout << "Book Lent" << std::endl;
 }
 
 
